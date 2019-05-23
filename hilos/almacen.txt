@@ -1,0 +1,3 @@
+fernando;123345;344;VISA;venta;1200
+david;1233456;344;VISA;venta;3000
+jeronimo;12343456;344;VISA;venta;4000
