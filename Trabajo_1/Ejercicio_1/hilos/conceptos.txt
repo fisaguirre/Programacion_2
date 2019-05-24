@@ -1,0 +1,6 @@
+fernando;123345;344;visa;venta;1200
+david;1233456;344;visa;venta;3000
+jeronimo;12343456;344;visa;venta;4000
+camila;12343456;344;visa;venta;3120
+renato;12343456;344;visa;venta;4050
+matias;12343456;344;visa;venta;1234
