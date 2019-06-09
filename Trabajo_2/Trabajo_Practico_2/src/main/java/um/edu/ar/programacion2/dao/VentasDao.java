@@ -17,8 +17,8 @@ public class VentasDao implements IVentasDao {
 
 	protected Connection con;
 
-	public VentasDao() {
-		Connection conect = ConnectionFactory.getConnection();
+	public VentasDao(Connection conect) {
+		//Connection conect = ConnectionFactory.getConnection();
 		this.con = conect;
 	}
 
@@ -48,7 +48,7 @@ public class VentasDao implements IVentasDao {
 			e.printStackTrace();
 		}
 
-		String sqlBuscar_id = "SELECT * FROM Ventas ORDER BY ventas_id DESC Limit 1;";
+		String sqlBuscar_id = "SELECT * FROM Ventas ORDER BY venta_id DESC Limit 1;";
 
 		Statement stmt_2 = null;
 		ResultSet rs_2 = null;
@@ -58,7 +58,7 @@ public class VentasDao implements IVentasDao {
 			rs_2 = stmt_2.executeQuery(sqlBuscar_id);
 
 			if (rs_2.next()) {
-				Integer id_venta = rs_2.getInt("ventas_id");
+				Integer id_venta = rs_2.getInt("venta_id");
 				venta.setVenta_id(id_venta);
 			}
 			stmt_2.close();
@@ -69,13 +69,14 @@ public class VentasDao implements IVentasDao {
 
 		ArrayList<Producto> lista_producto = new ArrayList<Producto>();
 		lista_producto = (ArrayList<Producto>) venta.getProductos();
-
+		PreparedStatement stmt_3 = null;
 		for (int i = 0; i < lista_producto.size(); i++) {
 			try {
-				stmt = this.con.prepareStatement(sqlInsertar_intermedia);
-				stmt.setInt(1, venta.getVenta_id());
-				stmt.setInt(2, lista_producto.get(i).getProducto_id());
-				stmt.execute();
+				stmt_3 = this.con.prepareStatement(sqlInsertar_intermedia);
+				stmt_3.setInt(1, venta.getVenta_id());
+				stmt_3.setInt(2, lista_producto.get(i).getProducto_id());
+				stmt_3.execute();
+				stmt_3.close();
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
@@ -90,14 +91,58 @@ public class VentasDao implements IVentasDao {
 	}
 
 	@Override
-	public void borrar(Integer venta_id) {
-		// TODO Auto-generated method stub
+	public boolean borrar(Ventas venta) {
+		// Paso 2 - ejecucion de SQL
+		Statement stmt = null;
+		String sqlBorrar = "Delete from Ventas WHERE venta_id=" + venta.getVenta_id() + ";";
+
+		try {
+
+			stmt = this.con.createStatement();
+			stmt.execute(sqlBorrar);
+
+			// Paso 4 - Cerrar conexión
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		Statement stmt_2 = null;
+		String sqlBorrar_2 = "Delete from Venta_producto WHERE venta_id=" + venta.getVenta_id() + ";";
+
+		try {
+
+			stmt_2 = this.con.createStatement();
+			stmt_2.execute(sqlBorrar_2);
+
+			// Paso 4 - Cerrar conexión
+			stmt_2.close();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 
 	}
 
 	@Override
-	public Ventas find(Long id) {
-		// TODO Auto-generated method stub
+	public Ventas find(Integer id) {
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String sqlFind = "Select * from Ventas "
+				+ "INNER JOIN Venta_producto ON Venta_producto.venta_id = Ventas.venta_id "
+				+ "INNER JOIN Producto ON Producto.producto_id = Venta_producto.producto_id "
+				+ "WHERE Ventas.venta_id = '" + id + "';";
+		try {
+			stmt = this.con.createStatement();
+			rs = stmt.executeQuery(sqlFind);
+			while (rs.next()) {
+				System.out.println("una venta es: " + rs.getString("Producto.nombre"));
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		return null;
 	}
 

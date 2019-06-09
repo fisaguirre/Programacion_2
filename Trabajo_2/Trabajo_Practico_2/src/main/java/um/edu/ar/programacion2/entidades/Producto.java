@@ -18,6 +18,14 @@ public class Producto {
 		this.precio = precio;
 	}
 
+	public Producto(Integer producto_id, String nombre, String descripcion, Integer precio) {
+		super();
+		this.producto_id = producto_id;
+		this.nombre = nombre;
+		this.descripcion = descripcion;
+		this.precio = precio;
+	}
+
 	public Integer getProducto_id() {
 		return producto_id;
 	}

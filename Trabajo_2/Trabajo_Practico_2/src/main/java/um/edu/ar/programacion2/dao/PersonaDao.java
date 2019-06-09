@@ -24,8 +24,8 @@ public class PersonaDao implements IPersonaDao {
 
 	protected Connection con;
 
-	public PersonaDao() {
-		Connection conect = ConnectionFactory.getConnection();
+	public PersonaDao(Connection conect) {
+		//Connection conect = ConnectionFactory.getConnection();
 		this.con = conect;
 	}
 
@@ -56,13 +56,43 @@ public class PersonaDao implements IPersonaDao {
 
 	}
 
-	public void borrar(Persona p) {
-		// TODO Auto-generated method stub
+	public boolean borrar(Persona p) {
+		Statement stmt = null;
+		String sqlBorrar = "Delete from Persona WHERE persona_id=" + p.getPersona_id() + ";";
+
+		try {
+
+			stmt = this.con.createStatement();
+			stmt.execute(sqlBorrar);
+
+			// Paso 4 - Cerrar conexión
+			stmt.close();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 
 	}
 
-	public Persona find(Long id) {
-		// TODO Auto-generated method stub
+	public Persona find(Integer id) {
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String sqlFind = "Select * from Persona " + "INNER JOIN Ventas ON Ventas.persona_id = Persona.persona_id "
+				+ "INNER JOIN Venta_producto ON Venta_producto.venta_id = Ventas.venta_id "
+				+ "INNER JOIN Producto ON Producto.producto_id = Venta_producto.producto_id "
+				+ "WHERE Persona.persona_id = '" + id + "';";
+		try {
+			stmt = this.con.createStatement();
+			rs = stmt.executeQuery(sqlFind);
+			while (rs.next()) {
+				System.out.println("un producto es: " + rs.getString("Producto.nombre"));
+			}
+		} catch (Exception e) {
+			System.out.println("MAL");
+			// TODO: handle exception
+		}
 		return null;
 	}
 

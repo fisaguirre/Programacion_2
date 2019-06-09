@@ -10,9 +10,9 @@ public interface IPersonaDao {
 
 	public void actualizar(Persona p);
 
-	public void borrar(Persona p);
+	public boolean borrar(Persona p);
 
-	public Persona find(Long id);
+	public Persona find(Integer id);
 	
 	public List<Persona> findAll(List<Persona> persona);
 

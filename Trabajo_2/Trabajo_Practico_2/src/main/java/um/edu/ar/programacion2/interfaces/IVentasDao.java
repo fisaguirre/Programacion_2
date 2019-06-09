@@ -10,9 +10,9 @@ public interface IVentasDao {
 
 	public void actualizar(Ventas vt, Integer venta_id);
 
-	public void borrar(Integer venta_id);
+	public boolean borrar(Ventas venta);
 
-	public Ventas find(Long id);
+	public Ventas find(Integer id);
 
 	public List<Ventas> findAll(List<Ventas> venta);
 }

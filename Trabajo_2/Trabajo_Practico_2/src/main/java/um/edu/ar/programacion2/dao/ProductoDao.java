@@ -24,8 +24,8 @@ public class ProductoDao implements IProductoDao {
 
 	protected Connection con;
 
-	public ProductoDao() {
-		Connection conect = ConnectionFactory.getConnection();
+	public ProductoDao(Connection conect) {
+		// Connection conect = ConnectionFactory.getConnection();
 		this.con = conect;
 	}
 
@@ -53,13 +53,12 @@ public class ProductoDao implements IProductoDao {
 		}
 	}
 
-	public void actualizar(Producto pr, Integer producto_id) {
-		Connection con = ConnectionFactory.getConnection();
+	public boolean actualizar(Producto producto) {
 
-		// Paso 2 - ejecucion de SQL
 		Statement stmt = null;
-		String sqlModificar = "Update Producto SET nombre=" + pr.getNombre() + ", descripcion=" + pr.getDescripcion()
-				+ ", precio=" + pr.getPrecio() + " WHERE producto_id=" + producto_id + ";";
+		String sqlModificar = "Update Producto SET nombre=" + producto.getNombre() + ", descripcion="
+				+ producto.getDescripcion() + ", precio=" + producto.getPrecio() + " WHERE producto_id="
+				+ producto.getProducto_id() + ";";
 
 		try {
 
@@ -69,34 +68,36 @@ public class ProductoDao implements IProductoDao {
 
 			// Paso 4 - Cerrar conexión
 			stmt.close();
-			con.close();
+			return true;
+			//con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return false;
+
 	}
 
-	public void borrar(Integer producto_id) {
-		Connection con = ConnectionFactory.getConnection();
-
+	public boolean borrar(Producto producto) {
 		// Paso 2 - ejecucion de SQL
 		Statement stmt = null;
-		String sqlBorrar = "Delete from Producto WHERE producto_id=" + producto_id + ";";
+		String sqlBorrar = "Delete from Producto WHERE producto_id=" + producto.getProducto_id() + ";";
 
 		try {
 
-			stmt = con.createStatement();
+			stmt = this.con.createStatement();
 			stmt.execute(sqlBorrar);
 
 			// Paso 4 - Cerrar conexión
 			stmt.close();
-			con.close();
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return false;
 
 	}
 
-	public Producto find(Long id) {
+	public Producto find(Integer id) {
 		Connection con = ConnectionFactory.getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -107,12 +108,13 @@ public class ProductoDao implements IProductoDao {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery(sqlBuscar);
 			// Paso 3 - leer datos
-			while (rs.next()) {
+			if (rs.next()) {
+				Integer id_p = rs.getInt("producto_id");
 				String nombre = rs.getString("nombre");
 				String descripcion = rs.getString("descripcion");
 				Integer precio = rs.getInt("precio");
-				System.out.println("ID: " + String.valueOf(id) + " - Nombre: " + nombre + " - Descripcion: "
-						+ descripcion + " - Precio: " + precio);
+				Producto nuevo_producto = new Producto(id_p, nombre, descripcion, precio);
+				return nuevo_producto;
 			}
 		} catch (SQLException ex) {
 			ex.printStackTrace();

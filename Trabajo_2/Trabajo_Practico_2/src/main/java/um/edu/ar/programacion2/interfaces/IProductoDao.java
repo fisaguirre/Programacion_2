@@ -8,11 +8,11 @@ public interface IProductoDao {
 
 	public void insertar(Producto producto);
 
-	public void actualizar(Producto pr, Integer producto_id);
+	public boolean actualizar(Producto producto);
 
-	public void borrar(Integer producto_id);
+	public boolean borrar(Producto producto);
 
-	public Producto find(Long id);
+	public Producto find(Integer id);
 
 	public List<Producto> findAll(List<Producto> producto);
 }
