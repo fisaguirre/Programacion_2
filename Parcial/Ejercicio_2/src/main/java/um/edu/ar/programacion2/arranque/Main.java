@@ -5,6 +5,7 @@ package um.edu.ar.programacion2.arranque;
 
 import java.io.ObjectInputStream.GetField;
 import java.sql.Connection;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,7 +82,7 @@ public class Main {
 			System.out.println("ID:"+persona.getPersona_id());
 			System.out.println("Nombre: "+persona.getNombre());
 			System.out.println("Apellido: "+persona.getApellido());
-			System.out.println("Documento: "+persona.getDocumento());
+			System.out.println("Documento: "+(NumberFormat.getIntegerInstance().format(persona.getDocumento())));
 			System.out.println("Activo: "+persona.getActivo());
 		}
 
@@ -128,7 +129,7 @@ public class Main {
 				System.out.println("ID: "+persona_l.get(i).getPersona_id());
 				System.out.println("Nombre: "+persona_l.get(i).getNombre());
 				System.out.println("Apellido: "+persona_l.get(i).getDocumento());
-				System.out.println("Documento: "+persona_l.get(i).getDocumento());
+				System.out.println("Documento: "+(NumberFormat.getIntegerInstance().format(persona_l.get(i).getDocumento())));
 				System.out.println("Activo: "+persona_l.get(i).getActivo());
 			}
 		}
