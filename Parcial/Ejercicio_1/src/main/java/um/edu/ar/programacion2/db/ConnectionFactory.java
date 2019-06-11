@@ -13,7 +13,7 @@ import java.sql.SQLException;
  */
 public class ConnectionFactory {
 
-	public static final String URL = "jdbc:mysql://localhost:3306/transactions_3";
+	public static final String URL = "jdbc:mysql://localhost:3306/transactions";
 	public static final String USER = "root";
 	public static final String PASS = "root";
 
@@ -21,7 +21,7 @@ public class ConnectionFactory {
 
 	public static Connection getConnection() {
 
-        String url = "jdbc:mysql://localhost:3306/transactions_3?autoReconnect=true&useSSL=false&user=" + USER + "&password=" + PASS;
+        String url = "jdbc:mysql://localhost:3306/transactions?autoReconnect=true&useSSL=false&user=" + USER + "&password=" + PASS;
         
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
